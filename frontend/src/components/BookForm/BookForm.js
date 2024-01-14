@@ -12,13 +12,11 @@ export const BookForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && author) {
-      // dispatch actioz
       const books = {
         title,
         author,
         id: uuidv4(),
       };
-      console.log(title, author);
       dispatch(addBook(books));
       setTitle('');
       setAuthor('');
