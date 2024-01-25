@@ -6,25 +6,28 @@ const initialState = {
   onlyFavorite: '',
 };
 
-const filterSlice = createSlice({
-  name: 'filter',
-  initialState,
-  reducers: {
-    setTitleFilter: (state, action) => {
-      // Immer library
-      state.title = action.payload;
-      // return { ...state, title: action.payload };
+const filterSlice = createSlice(
+  {
+    name: 'filter',
+    initialState,
+    reducers: {
+      setTitleFilter: (state, action) => {
+        // Immer library
+        state.title = action.payload;
+        // return { ...state, title: action.payload };
+      },
+      setAuthorFilter: (state, action) => {
+        console.log('setAuthorFilter =>', state);
+        state.author = action.payload;
+      },
+      setOnlyFavoriteFilter: (state) => {
+        state.onlyFavorite = !state.onlyFavorite;
+      },
+      resetFilters: () => initialState,
     },
-    setAuthorFilter: (state, action) => {
-      console.log('setAuthorFilter =>', state);
-      state.author = action.payload;
-    },
-    setOnlyFavoriteFilter: (state) => {
-      state.onlyFavorite = !state.onlyFavorite;
-    },
-    resetFilters: () => initialState,
   },
-});
+);
+
 export const {
   setTitleFilter,
   setAuthorFilter,
@@ -40,4 +43,5 @@ export const selectAuthorFilter = (state) => {
 export const selectOnlyFavoiteFilter = (state) => {
   return state.filter.onlyFavorite;
 };
-export default filterSlice.reducer;
+
+export const filterReducer = filterSlice.reducer;
