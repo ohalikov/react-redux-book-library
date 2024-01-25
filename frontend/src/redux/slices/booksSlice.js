@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = [{
-    id: '',
-    title: '',
-    author: '',
-    isFavorite: '',
-}]
+const initialState = []
 const bookSlice = createSlice(
   {
     name: 'books',
@@ -15,36 +10,18 @@ const bookSlice = createSlice(
         return [...state, action.payload];
       },
       toggleFavorite: (state, action) => {
-        console.log('setAuthorFilter =>', state);
-        state.author = action.payload;
+        return state.map((book) =>
+        book.id === action.payload
+          ? { ...book, isFavorite: !book.isFavorite }
+          : book
+        );
       },
-      deleteBook: () => initialState,
+      deleteBook: (state, action) => {
+        return state.filter((book) => book.id !== action.payload);
+      },
     },
   },
 )
 
 export const {addBook, toggleFavorite, deleteBook} = bookSlice.actions
-// const filterSlice = createSlice(
-//     {
-//       name: 'filter',
-//       initialState,
-//       reducers: {
-//         setTitleFilter: (state, action) => {
-//           // Immer library
-//           state.title = action.payload;
-//           // return { ...state, title: action.payload };
-//         },
-//         setAuthorFilter: (state, action) => {
-//           console.log('setAuthorFilter =>', state);
-//           state.author = action.payload;
-//         },
-//         setOnlyFavoriteFilter: (state) => {
-//           state.onlyFavorite = !state.onlyFavorite;
-//         },
-//         resetFilters: () => initialState,
-//       },
-//     },
-//   );
-console.log(bookSlice)
-
 export const booksReducer = bookSlice.reducer;
