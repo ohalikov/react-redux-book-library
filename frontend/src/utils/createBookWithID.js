@@ -1,9 +1,10 @@
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
-export const createBookWithID = (book) => {
-    return {
-        ...book,
-        isFavorite: false,
-        id: uuidv4()
-    }
-}
+export const createBookWithID = (book, source) => {
+  return {
+    ...book,
+    source,
+    isFavorite: false,
+    id: uuidv4(),
+  };
+};
