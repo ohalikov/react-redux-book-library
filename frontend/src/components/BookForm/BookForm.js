@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addBook } from '../../redux/slices/booksSlice'
+import { addBook } from '../../redux/slices/booksSlice';
 import booksData from '../../data/books.json';
 import { createBookWithID } from '../../utils/createBookWithID';
 import './BookForm.css';
@@ -14,7 +15,7 @@ export const BookForm = () => {
     const randomIndex = Math.floor(Math.random() * booksData.length);
     const randomBook = booksData[randomIndex];
 
-    const randomBookWithId = createBookWithID(randomBook)
+    const randomBookWithId = createBookWithID(randomBook);
 
     dispatch(addBook(randomBookWithId));
   };
@@ -22,14 +23,24 @@ export const BookForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && author) {
-      const books = createBookWithID({ title, author })
+      const books = createBookWithID({ title, author });
       dispatch(addBook(books));
       setTitle('');
       setAuthor('');
     }
   };
 
-
+  const handleAddRandomBookViaAPI = async () => {
+    try {
+      const res = await axios.get('http://localhost:4000/random-book');
+      if (res?.data?.title && res?.data?.author) {
+        const books = createBookWithID(res.data);
+        dispatch(addBook(books));
+      }
+    } catch (error) {
+      alert('sorry, try later', error);
+    }
+  };
   return (
     <div className="app-block book-form">
       <h1>BookForm</h1>
@@ -55,6 +66,9 @@ export const BookForm = () => {
         <button type="submit">Add book</button>
         <button type="button" onClick={handleAddRandomBook}>
           Add Random
+        </button>
+        <button type="button" onClick={handleAddRandomBookViaAPI}>
+          Add Random via API
         </button>
       </form>
     </div>
