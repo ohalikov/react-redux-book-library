@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addBook } from '../../redux/slices/booksSlice';
 import booksData from '../../data/books.json';
 import { createBookWithID } from '../../utils/createBookWithID';
-import { thunkFunction } from '../../redux/slices/booksSlice';
+import { fetchBook } from '../../redux/slices/booksSlice';
 import './BookForm.css';
 
 export const BookForm = () => {
@@ -31,7 +31,9 @@ export const BookForm = () => {
   };
 
   const handleAddRandomBookViaAPI = () => {
-    dispatch(thunkFunction);
+    const ff = fetchBook();
+    console.log(ff);
+    dispatch(ff);
   };
   return (
     <div className="app-block book-form">

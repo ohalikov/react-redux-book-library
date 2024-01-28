@@ -1,8 +1,14 @@
 import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createBookWithID } from '../../utils/createBookWithID';
 
 const initialState = [];
+
+export const fetchBook = createAsyncThunk('books/fetchBook', async () => {
+  const res = await axios.get('http://localhost:45000/random-book');
+  return res.data;
+});
+
 const bookSlice = createSlice({
   name: 'books',
   initialState,
@@ -21,6 +27,23 @@ const bookSlice = createSlice({
     deleteBook: (state, action) => {
       return state.filter((book) => book.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchBook.fulfilled, (state, action) => {
+      console.log('===> fulfilled', action);
+      if (action.payload.title && action.payload.author) {
+        const books = createBookWithID(action.payload, 'api');
+        state.push(books); // immer
+      }
+    });
+
+    builder.addCase(fetchBook.pending, (state, action) => {
+      console.log('===> pending', action);
+    });
+
+    builder.addCase(fetchBook.rejected, (state, action) => {
+      console.log('===> rejected', action);
+    });
   },
 });
 
