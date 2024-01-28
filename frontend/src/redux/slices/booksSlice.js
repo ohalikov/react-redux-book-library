@@ -48,7 +48,10 @@ const bookSlice = createSlice({
 });
 
 export const { addBook, toggleFavorite, deleteBook } = bookSlice.actions;
-export const selectBooks = (state) => state.books;
+export const selectBooks = (state) => {
+  console.log('===> selectbooks', state);
+  return state.books;
+};
 export const thunkFunction = async (dispatch, getState) => {
   try {
     const res = await axios.get('http://localhost:4000/random-book');
