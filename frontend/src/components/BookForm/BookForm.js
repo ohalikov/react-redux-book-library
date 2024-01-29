@@ -34,9 +34,7 @@ export const BookForm = () => {
   };
 
   const handleAddRandomBookViaAPI = () => {
-    const ff = fetchBook();
-    console.log(ff);
-    dispatch(ff);
+    dispatch(fetchBook('http://localhost:4000/random-book'));
   };
   return (
     <div className="app-block book-form">
