@@ -37,14 +37,22 @@ const bookSlice = createSlice({
       return state.filter((book) => book.id !== action.payload);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(fetchBook.fulfilled, (state, action) => {
+  extraReducers: {
+    [fetchBook.fulfilled]: (state, action) => {
       if (action.payload.title && action.payload.author) {
         const books = createBookWithID(action.payload, 'api');
         state.push(books); // immer
       }
-    });
+    },
   },
+  // extraReducers: (builder) => {
+  //   builder.addCase(fetchBook.fulfilled, (state, action) => {
+  //     if (action.payload.title && action.payload.author) {
+  //       const books = createBookWithID(action.payload, 'api');
+  //       state.push(books); // immer
+  //     }
+  //   });
+  // },
 });
 
 export const { addBook, toggleFavorite, deleteBook } = bookSlice.actions;
