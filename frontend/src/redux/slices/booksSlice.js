@@ -3,7 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createBookWithID } from '../../utils/createBookWithID';
 import { setError } from './errorSlice';
 
-const initialState = [];
+const initialState = {
+  books: [],
+  isLoadingViaAPI: false,
+};
 
 export const fetchBook = createAsyncThunk(
   'books/fetchBook',
@@ -24,25 +27,35 @@ const bookSlice = createSlice({
   reducers: {
     addBook: (state, action) => {
       // return [...state, action.payload];
-      state.push(action.payload); // immer
+      state.books.push(action.payload); // immer
     },
     toggleFavorite: (state, action) => {
-      state.forEach((book) => {
+      state.books.forEach((book) => {
         if (book.id === action.payload) {
           book.isFavorite = !book.isFavorite; // immer
         }
       });
     },
     deleteBook: (state, action) => {
-      return state.filter((book) => book.id !== action.payload);
+      return {
+        ...state,
+        books: state.books.filter((book) => book.id !== action.payload),
+      };
     },
   },
   extraReducers: {
+    [fetchBook.pending]: (state) => {
+      state.isLoadingViaAPI = true;
+    },
     [fetchBook.fulfilled]: (state, action) => {
+      state.isLoadingViaAPI = false;
       if (action.payload.title && action.payload.author) {
         const books = createBookWithID(action.payload, 'api');
-        state.push(books); // immer
+        state.books.push(books); // immer
       }
+    },
+    [fetchBook.rejected]: (state) => {
+      state.isLoadingViaAPI = false;
     },
   },
   // extraReducers: (builder) => {
@@ -57,6 +70,6 @@ const bookSlice = createSlice({
 
 export const { addBook, toggleFavorite, deleteBook } = bookSlice.actions;
 export const selectBooks = (state) => {
-  return state.books;
+  return state.books.books;
 };
 export const booksReducer = bookSlice.reducer;
