@@ -16,7 +16,7 @@ export const fetchBook = createAsyncThunk(
       return res.data;
     } catch (error) {
       thunkAPI.dispatch(setError(error.message));
-      throw error;
+      return thunkAPI.rejectWithValue(error)
     }
   }
 );
@@ -49,7 +49,7 @@ const bookSlice = createSlice({
     },
     [fetchBook.fulfilled]: (state, action) => {
       state.isLoadingViaAPI = false;
-      if (action.payload.title && action.payload.author) {
+      if (action?.payload?.title && action?.payload?.author) {
         const books = createBookWithID(action.payload, 'api');
         state.books.push(books); // immer
       }
