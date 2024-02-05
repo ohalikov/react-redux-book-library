@@ -72,4 +72,5 @@ export const { addBook, toggleFavorite, deleteBook } = bookSlice.actions;
 export const selectBooks = (state) => {
   return state.books.books;
 };
+export const selectIsLoadingViaAPI = (state) => state.books.isLoadingViaAPI
 export const booksReducer = bookSlice.reducer;
